@@ -12,12 +12,12 @@ A small, mobile-friendly tournament site for running a badminton day with friend
 
 ## Run it locally
 
-1. In Vercel, create a private Blob store from the project's Storage tab. This adds BLOB_READ_WRITE_TOKEN to the project.
+1. In Vercel, create and connect a private Blob store from the project's Storage tab. Vercel supplies either its automatic OIDC credentials or `BLOB_READ_WRITE_TOKEN` to the deployment.
 2. Copy .env.example to .env.local, then add the Blob token plus your organizer password and session secret.
 3. Install dependencies with `npm install`, then run `npm run dev`.
 4. Open `http://localhost:3000`; open `/organizer` to sign in.
 
-Deploying to Vercel uses the same environment variables. Run `npm test` for the domain-rule tests and `npm run typecheck` before deploying.
+After connecting a store or changing environment variables, redeploy so the new deployment receives them. Run `npm test` for the domain-rule tests and `npm run typecheck` before deploying.
 
 ## How to use the web app
 
