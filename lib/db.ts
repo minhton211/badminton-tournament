@@ -1,4 +1,4 @@
-import { BlobNotFoundError, BlobPreconditionFailedError, get, head, put } from "@vercel/blob";
+import { BlobPreconditionFailedError, get, put } from "@vercel/blob";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import { dirname, resolve } from "path";
 import { assignCourts, compactPlayerName, defaultRatingSettings, displayStage, eloDelta, type MatchStatus, type QueueMatch, type RatingSettings, type TournamentStatus } from "./domain";
@@ -26,7 +26,7 @@ const normalize=(value:any):Store=>!Array.isArray(value?.tournaments)?blank():{.
 // automatically, so only use the local JSON fallback outside Vercel when neither
 // authentication mechanism is available.
 const usesBlob=()=>Boolean(process.env.BLOB_READ_WRITE_TOKEN||process.env.VERCEL==="1");
-async function read():Promise<Snapshot>{if(!usesBlob()){const file=resolve(process.env.LOCAL_TOURNAMENT_FILE??".local/tournament.json");try{return {data:normalize(JSON.parse(await readFile(file,"utf8")))}}catch{return {data:blank()}}}for(let n=0;n<3;n++){let etag:string;try{etag=(await head(PATH)).etag}catch(error){if(error instanceof BlobNotFoundError)return {data:blank()};throw error;}const response=await get(PATH,{access:"private",useCache:false});if(!response?.stream||response.statusCode!==200)continue;const data=normalize(JSON.parse(await new Response(response.stream).text()));if(response.blob.etag===etag)return {data,etag};}throw Error("Could not read a consistent tournament snapshot.");}
+async function read():Promise<Snapshot>{if(!usesBlob()){const file=resolve(process.env.LOCAL_TOURNAMENT_FILE??".local/tournament.json");try{return {data:normalize(JSON.parse(await readFile(file,"utf8")))}}catch{return {data:blank()}}}const response=await get(PATH,{access:"private",useCache:false});if(!response?.stream||response.statusCode!==200)return {data:blank()};return {data:normalize(JSON.parse(await new Response(response.stream).text())),etag:response.blob.etag};}
 async function write(data:Store,etag?:string){if(!usesBlob()){if(process.env.NODE_ENV==="production")throw Error("Create or connect a Vercel Blob store before deploying.");const file=resolve(process.env.LOCAL_TOURNAMENT_FILE??".local/tournament.json");await mkdir(dirname(file),{recursive:true});return writeFile(file,JSON.stringify(data,null,2));}return put(PATH,JSON.stringify(data),{access:"private",allowOverwrite:true,contentType:"application/json",...(etag?{ifMatch:etag}:{})});}
 // Some deployed SDK bundles do not preserve the error's prototype across the
 // function boundary. Match the documented error class first, then its stable
