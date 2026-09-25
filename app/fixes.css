@@ -1,0 +1,13 @@
+/* Keep tournament navigation full-width when it is placed inside a grid. */
+.division-tabs{grid-column:1 / -1;width:100%}
+
+/* Tournament rows are navigation, not primary actions. */
+.tournament-open,.tournament-open:hover,.tournament-open:focus-visible{background:transparent;color:var(--ink);box-shadow:none;transform:none}
+.tournament-open:hover{color:var(--ink)}
+tbody tr:hover{background:transparent}
+
+.matchup{line-height:1.65}.match-versus{display:inline-flex;align-items:center;justify-content:center;margin:0 .42rem;padding:1px 6px;border-radius:999px;background:var(--warm-soft);color:#8a5b0b;font-size:.62rem;font-weight:900;letter-spacing:.08em;vertical-align:middle}
+
+.wide>button+button,.wide>button+.status-control{margin-left:10px}
+
+.playoff-confirmation{margin-top:18px}.qualifier-list{display:grid;gap:8px;margin:16px 0}.qualifier-list label{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fffefa;cursor:pointer}.qualifier-list input{width:auto;accent-color:var(--brand)}.qualifier-list small{color:var(--muted)}.playoff-actions{display:flex;flex-wrap:wrap;gap:10px}
