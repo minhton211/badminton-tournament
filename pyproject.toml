@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "friendly-badminton-tournament-tools"
+version = "0.1.0"
+description = "Offline Elo simulation tools for Friendly Badminton Tournament"
+requires-python = ">=3.11"
+dependencies = [
+  "jupyterlab>=4.2",
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+]
+
+# This project ships notebooks and a Next.js app, not an importable Python
+# distribution.  Disable setuptools' flat-layout auto-discovery so it does not
+# mistake project directories (such as app/ and node_modules/) for packages.
+[tool.setuptools]
+packages = []
+
+[tool.pytest.ini_options]
+testpaths = ["python_tests"]
