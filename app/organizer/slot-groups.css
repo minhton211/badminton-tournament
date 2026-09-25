@@ -1,0 +1,27 @@
+.slot-group table {
+  table-layout: fixed;
+}
+
+.slot-group th:first-child,
+.slot-group td:first-child {
+  width: 10%;
+}
+
+.slot-group th:nth-child(2),
+.slot-group td:nth-child(2),
+.slot-group th:nth-child(3),
+.slot-group td:nth-child(3) {
+  width: 38%;
+}
+
+.slot-group th:last-child,
+.slot-group td:last-child {
+  width: 14%;
+  white-space: nowrap;
+}
+
+/* Singles has no second-player column, so give the name selector more room. */
+.slot-group th:nth-child(2):nth-last-child(2),
+.slot-group td:nth-child(2):nth-last-child(2) {
+  width: 76%;
+}
