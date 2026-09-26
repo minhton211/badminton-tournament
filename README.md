@@ -19,6 +19,14 @@ A small, mobile-friendly tournament site for running a badminton day with friend
 
 After connecting a store or changing environment variables, redeploy so the new deployment receives them. Run `npm test` for the domain-rule tests and `npm run typecheck` before deploying.
 
+## Blob storage and organizer writes
+
+Tournament data is kept in one private Vercel Blob JSON document. The app uses an unconditional overwrite for each organizer action, rather than an ETag-conditional overwrite: Vercel Blob's overwrite cache can otherwise make a current action fail with an ETag mismatch even when there is only one organizer.
+
+This is appropriate only when organizers take turns making changes. Keep one organizer tab/device active while editing; an overlapping save can overwrite another organizer's unsaved change. Vercel Blob is object storage, not a transactional database.
+
+For simultaneous organizers, do not re-enable ETag retries on this document. Migrate the write model to immutable action blobs (one uniquely named action per change) and rebuild the tournament state from those actions, with per-division and per-match conflict checks. That design avoids overwriting the shared document and can explicitly ask an organizer to refresh when two people change the same item.
+
 ## How to use the web app
 
 1. Open the public tournament link to see live courts, upcoming matches, standings, brackets, and player ratings.
